@@ -96,3 +96,13 @@ jobs:                          # jobs to execute in the pipeline.
        #   ignore-unfixed: true
        #   vuln-type: 'os,library'
        #   severity: 'CRITICAL,HIGH'
+
+       - name: Checkout Kubernetes Manifest Repository
+         uses: actions/checkout@v4
+         with:
+           repository: ${{ inputs.K8S_MANIFEST_REPO }}
+           ref: main
+           path: deploy-manifests
+#           token: ${{ inputs.DEVOPS_WORKFLOW_TOKEN }}
+
+           
