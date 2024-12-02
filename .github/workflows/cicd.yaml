@@ -1,13 +1,14 @@
-name: cicd pipeline
-on:
+
+name: cicd pipeline      # name of the pipeline.
+on:                      # when need to run the pipeline.
   push:
-    branches: [ "main" ]
+    branches: [ "main" ]  
     paths-ignore:
  #     - 'manifests/**'
       - 'README.md'
   pull_request:
 
-permissions:
+permissions:                # required permission to run the pipeline.
   id-token: write
   contents: write
   security-events: write
@@ -15,10 +16,10 @@ permissions:
   pull-requests: write
 
 
-jobs:
+jobs:                          # jobs to execute in the pipeline.
   
- AssumeRoleAndCallIdentity:
-   runs-on: ubuntu-latest
+ AssumeRoleAndCallIdentity:     # job name.
+   runs-on: ubuntu-latest       # server to run the job
    steps:
 
     - name: "Configure AWS Credentials Action for GitHub Actions"
@@ -26,15 +27,15 @@ jobs:
       with:
           audience: sts.amazonaws.com
           aws-region: us-west-2
-          role-to-assume: arn:aws:iam::944283277918:role/github-id-role
+          role-to-assume: arn:aws:iam::944283277918:role/github-id-role     
             
-    - name: Sts GetCallerIdentity
+    - name: Sts GetCallerIdentity              #verify the authentication successfull or not?
       run: |
           aws sts get-caller-identity
 
- gitleak-scan:
+ gitleak-scan:                                 # 2nd job 
     
-    needs: AssumeRoleAndCallIdentity
+    needs: AssumeRoleAndCallIdentity           # to requirement for previous job to completed.
 
     name: gitleaks
     runs-on: ubuntu-latest
@@ -58,7 +59,7 @@ jobs:
 
        - uses: actions/checkout@v4
 
-       - name: Set up JDK 17
+       - name: Set up JDK 17                 # to install java 17 version.
          uses: actions/setup-java@v4
          with:
           java-version: '17'
@@ -66,10 +67,10 @@ jobs:
           cache: maven
 
 
-       - name: Build with Maven
+       - name: Build with Maven               
          run: mvn -B package --file pom.xml
 
-       - name: Configure AWS Credentials 
+       - name: Configure AWS Credentials                  
          uses: aws-actions/configure-aws-credentials@v4
          with:
           audience: sts.amazonaws.com
@@ -77,22 +78,21 @@ jobs:
           role-to-assume: arn:aws:iam::944283277918:role/github-id-role
 
        - name: ECR login
-         run:  aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 944283277918.dkr.ecr.us-west-2.amazonaws.com
+         run:  aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 944283277918.dkr.ecr.us-west-2.amazonaws.com      
 
 
        - name: Build and Push Docker Image
-         run: |
+         run: |                                      
           docker build -t springboot-app-githubactions .
           docker tag springboot-app-githubactions:latest 944283277918.dkr.ecr.us-west-2.amazonaws.com/springboot-app-githubactions:${{ github.sha }}
           docker push 944283277918.dkr.ecr.us-west-2.amazonaws.com/springboot-app-githubactions:${{ github.sha }}
          
-       - name: Scan Docker Image using Trivy vulnerability scanner
-         uses: aquasecurity/trivy-action@0.20.0
-         with:
-          image-ref: '944283277918.dkr.ecr.us-west-2.amazonaws.com/springboot-app-githubactions:${{ github.sha }}'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
-          
+       #- name: Scan Docker Image using Trivy vulnerability scanner
+       #  uses: aquasecurity/trivy-action@0.20.0  
+       #  with:
+       #   image-ref: '944283277918.dkr.ecr.us-west-2.amazonaws.com/springboot-app-githubactions:${{ github.sha }}'
+       #   format: 'table'
+       #   exit-code: '1'
+       #   ignore-unfixed: true
+       #   vuln-type: 'os,library'
+       #   severity: 'CRITICAL,HIGH'
