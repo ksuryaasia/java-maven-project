@@ -47,3 +47,52 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+
+ appbuild:
+
+     needs: gitleak-scan
+
+     runs-on: ubuntu-latest
+
+     steps:
+
+       - uses: actions/checkout@v4
+
+       - name: Set up JDK 17
+         uses: actions/setup-java@v4
+         with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+
+       - name: Build with Maven
+         run: mvn -B package --file pom.xml
+
+       - name: Configure AWS Credentials 
+         uses: aws-actions/configure-aws-credentials@v4
+         with:
+          audience: sts.amazonaws.com
+          aws-region: us-west-2
+          role-to-assume: arn:aws:iam::944283277918:role/github-id-role
+
+       - name: ECR login
+         run:  aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 944283277918.dkr.ecr.us-west-2.amazonaws.com
+
+
+       - name: Build and Push Docker Image
+         run: |
+          docker build -t springboot-app-githubactions .
+          docker tag springboot-app-githubactions:latest 944283277918.dkr.ecr.us-west-2.amazonaws.com/springboot-app-githubactions:${{ github.sha }}
+          docker push 944283277918.dkr.ecr.us-west-2.amazonaws.com/springboot-app-githubactions:${{ github.sha }}
+         
+       - name: Scan Docker Image using Trivy vulnerability scanner
+         uses: aquasecurity/trivy-action@0.20.0
+         with:
+          image-ref: '944283277918.dkr.ecr.us-west-2.amazonaws.com/springboot-app-githubactions:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          
