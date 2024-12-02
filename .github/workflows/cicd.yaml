@@ -1,0 +1,49 @@
+name: cicd pipeline
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+ #     - 'manifests/**'
+      - 'README.md'
+  pull_request:
+
+permissions:
+  id-token: write
+  contents: write
+  security-events: write
+  actions: read
+  pull-requests: write
+
+
+jobs:
+  
+ AssumeRoleAndCallIdentity:
+   runs-on: ubuntu-latest
+   steps:
+
+    - name: "Configure AWS Credentials Action for GitHub Actions"
+      uses: aws-actions/configure-aws-credentials@v4.0.2
+      with:
+          audience: sts.amazonaws.com
+          aws-region: us-west-2
+          role-to-assume: arn:aws:iam::944283277918:role/github-id-role
+            
+    - name: Sts GetCallerIdentity
+      run: |
+          aws sts get-caller-identity
+
+ gitleak-scan:
+    
+    needs: AssumeRoleAndCallIdentity
+
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
