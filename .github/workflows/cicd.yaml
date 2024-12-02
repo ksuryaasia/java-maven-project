@@ -100,7 +100,7 @@ jobs:                          # jobs to execute in the pipeline.
        - name: Checkout Kubernetes Manifest Repository
          uses: actions/checkout@v4
          with:
-           repository: ${{ inputs.K8S_MANIFEST_REPO }}
+           repository: ksuryaasia/manifest-repo
            ref: main
            path: deploy-manifests
 #           token: ${{ inputs.DEVOPS_WORKFLOW_TOKEN }}
