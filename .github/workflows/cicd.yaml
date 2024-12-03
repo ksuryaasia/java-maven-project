@@ -56,12 +56,12 @@ jobs:                          # jobs to execute in the pipeline.
      needs: gitleak-scan
 
      runs-on: ubuntu-latest
-     permissions: 
-      deployments: write               # Job-level permissions configuration starts here
-      id-token: write
-      contents: write           # 'write' access to repository contents
-      pull-requests: write      # 'write' access to pull requests
-      checks: read
+     #permissions: 
+     # deployments: write               # Job-level permissions configuration starts here
+     # id-token: write
+     # contents: write           # 'write' access to repository contents
+     # pull-requests: write      # 'write' access to pull requests
+     # checks: read
 
      steps:
 
