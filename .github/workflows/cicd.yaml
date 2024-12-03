@@ -14,6 +14,13 @@ permissions:                # required permission to run the pipeline.
   security-events: write
   actions: write
   pull-requests: write
+  issues: write
+  repository-projects: write
+  checks: write
+  deployments: write
+  discussions: write
+  packages: write
+  statuses: write
 
 
 jobs:                          # jobs to execute in the pipeline.
