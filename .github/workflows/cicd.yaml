@@ -12,7 +12,7 @@ permissions:                # required permission to run the pipeline.
   id-token: write
   contents: write
   security-events: write
-  actions: read
+  actions: write
   pull-requests: write
 
 
