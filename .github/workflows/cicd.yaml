@@ -132,5 +132,7 @@ jobs:                          # jobs to execute in the pipeline.
          with:
            github_token: ${{ secrets.GITHUB_TOKEN }}
            branch: ${{ github.ref }}
+           repository: ksuryaasia/manifest-repo
+           force: true
 
            
