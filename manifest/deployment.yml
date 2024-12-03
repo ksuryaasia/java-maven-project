@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: 94944283277918.dkr.ecr.us-west-2.amazonaws.com/springboot-app-githubactions:1bbc9e012b6d20d843eb4c9dd2a94063ade43ae4
+        image: 944283277918.dkr.ecr.us-west-2.amazonaws.com/springboot-app-githubactions:89ac9defd63760fc391a178c03e367882f0de1ca
         ports:
         - containerPort: 80
 
