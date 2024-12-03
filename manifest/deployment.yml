@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: 94944283277918.dkr.ecr.us-west-2.amazonaws.com/springboot-app-githubactions:1bbc9e012b6d20d843eb4c9dd2a94063ade43ae4
+        ports:
+        - containerPort: 80
+
