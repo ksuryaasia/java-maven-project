@@ -1,12 +1,13 @@
 
 name: cicd pipeline      # name of the pipeline.
 on:                      # when need to run the pipeline.
-  push:
-    branches: [ "main" ]  
-    paths-ignore:
- #     - 'manifests/**'
-      - 'README.md'
-  pull_request:
+    workflow_dispatch:
+  #push:
+  #  branches: [ "main" ]  
+  #  paths-ignore:
+ ##     - 'manifests/**'
+  #    - 'README.md'
+  #pull_request:
 
 permissions:                # required permission to run the pipeline.
   id-token: write
