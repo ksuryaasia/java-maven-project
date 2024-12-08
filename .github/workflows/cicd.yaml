@@ -112,14 +112,14 @@ jobs:                          # jobs to execute in the pipeline.
        #   vuln-type: 'os,library'
        #   severity: 'CRITICAL,HIGH'
 
-      # - name: Checkout Kubernetes Manifest Repository
-      #   uses: actions/checkout@v4
-      #   with:
-      #     repository: 'ksuryaasia/manifest-repo'
-      #     ref: 'main'
-      #     path: 'deploy-manifests'
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     persist-credentials: true     
+       - name: Checkout Kubernetes Manifest Repository
+         uses: actions/checkout@v4
+         with:
+           repository: 'ksuryaasia/manifest-repo'
+           ref: 'main'
+           path: 'deploy-manifests'
+           token: ${{ secrets.SECRET_PAT }}
+           persist-credentials: true     
 
        - name: Update Image version in yaml file
          run: |
