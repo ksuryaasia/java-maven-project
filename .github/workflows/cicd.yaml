@@ -129,11 +129,12 @@ jobs:                          # jobs to execute in the pipeline.
 
        - name: Commit and Push Changes
          run: | 
+           cd deploy-manifests
            ls -ltrh
            cat  manifest/deployment.yml
            git config user.name "ksuryaasia"
            git config user.email "ksuryaasia@gmail.com"
-           git add deploy-manifests/manifest/deployment.yml
+           git add -A
            git commit -m "Update Image to ${{ github.sha }}" || true
            git push 
          shell: bash
