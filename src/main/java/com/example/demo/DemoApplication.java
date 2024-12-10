@@ -1,13 +1,20 @@
-package com.example.demo;
+package com.docker.springboot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-public class DemoApplication {
+@RestController
+public class SpringbootApplication {
 
+	@GetMapping("/welcome")
+    public String welcome(){
+		return "This is Springboot Application created by Khaja Ehteshamuddin Ahmed";
+	}
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(SpringbootApplication.class, args);
 	}
 
 }
