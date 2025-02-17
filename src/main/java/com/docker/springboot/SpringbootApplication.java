@@ -1,20 +1,13 @@
-package com.docker.springboot;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@SpringBootApplication
-@RestController
-public class SpringbootApplication {
-
-	@GetMapping("/welcome")
-    public String welcome(){
-		return "Hello, This is Springboot Application created by Khaja Ehteshamuddin Ahmed";
-	}
-	public static void main(String[] args) {
-		SpringApplication.run(SpringbootApplication.class, args);
-	}
-
+package com.acme.basic;
+ 
+public class HelloWorld {
+ 
+  void sayHello() {
+    System.out.println("Hello World!");
+  }
+ 
+  void notCovered() {
+    System.out.println("This method is not covered by unit tests");
+  }
+ 
 }
